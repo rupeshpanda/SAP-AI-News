@@ -90,7 +90,7 @@ async function fetchNews() {
             // Update last updated message
             const now = new Date();
             const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            statusMessage.textContent = `Updated at ${timeStr}`;
+            statusMessage.innerHTML = `Updated at ${timeStr} <span class="refresh-tip">(Refresh to pull latest data)</span>`;
             statusMessage.classList.remove('syncing');
         } else {
             throw new Error('Failed to retrieve news data');

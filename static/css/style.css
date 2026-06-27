@@ -103,13 +103,23 @@ body {
 
 .status-indicator {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 12px;
     color: var(--text-secondary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
+}
+
+.refresh-tip {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
 }
 
 .status-indicator::before {
