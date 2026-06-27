@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>SAP Business AI & Agentic AI Radar</title>
+    <meta name="description" content="An enterprise intelligence dashboard tracking updates, press releases, and advances in SAP AI, Agentic AI, and Joule.">
+    <meta name="keywords" content="SAP, AI, Agentic AI, Joule, Autonomous Enterprise, SAP News, Agentic Workflows">
+    <meta name="author" content="SAP AI Community Radar">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar" id="appNavbar">
+        <div class="nav-container">
+            <a class="nav-brand" href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+                <svg width="32" height="32" viewBox="0 0 34 34" aria-label="Elegance AI" aria-hidden="true" style="flex-shrink:0;">
+                    <rect width="34" height="34" rx="7" fill="#0D7377"></rect>
+                    <circle cx="12" cy="17" r="2.6" fill="#fff"></circle>
+                    <circle cx="22" cy="11" r="2.6" fill="#fff"></circle>
+                    <circle cx="22" cy="23" r="2.6" fill="#fff"></circle>
+                    <path d="M14 16 L22 12 M14 18 L22 22" stroke="#fff" stroke-width="1.5"></path>
+                </svg>
+                <span class="brand-title">Elegance AI <span class="brand-sub">Applied AI NEWS in SAP</span></span>
+            </a>
+            
+            <div class="nav-meta">
+                <span class="status-indicator" id="statusMessage">Checking news feed...</span>
+                <button class="nav-refresh-btn" id="refreshBtn">
+                    <svg class="icon-refresh" id="refreshIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.5 2V6H17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21.34 11.5C21 16.2 17.2 20 12.5 20C7.8 20 4 16.2 4 11.5C4 6.8 7.8 3 12.5 3C15.6 3 18.3 4.7 19.8 7.3L21.34 11.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="btnText">Sync Feed</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        
+        <!-- Dashboard Sub-Header / Hero -->
+        <header class="dashboard-hero">
+            <div class="hero-content">
+                <h1>The Autonomous Enterprise Intelligence</h1>
+                <p>Tracking the latest developments, developer frameworks, and strategic announcements on SAP Business AI and Agentic AI.</p>
+            </div>
+        </header>
+
+        <!-- Main Layout Split -->
+        <main class="main-layout">
+            
+            <!-- Left Side: News Feed & Controls -->
+            <div class="feed-section">
+                
+                <!-- Search & Filters Container (Premium Tab bar) -->
+                <div class="controls-container">
+                    <div class="search-row">
+                        <div class="search-box">
+                            <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <input type="text" id="searchInput" placeholder="Search publications, updates, topics...">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-row">
+                        <div class="tabs-list" id="categoryFilters">
+                            <button class="tab-btn active" data-category="all">All Updates</button>
+                            <button class="tab-btn" data-category="Agentic AI">Agentic AI</button>
+                            <button class="tab-btn" data-category="Developer Tools">Developer Tools</button>
+                            <button class="tab-btn" data-category="Partnerships">Partnerships</button>
+                            <button class="tab-btn" data-category="Business AI">Business AI</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed Container -->
+                <div class="news-feed" id="newsFeed">
+                    <!-- Skeletons (Initial loading state) -->
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                    <div class="skeleton-card"></div>
+                </div>
+            </div>
+
+            <!-- Right Side: Sidebar Widgets -->
+            <aside class="sidebar-section">
+                
+                <!-- Tweet Composer Card -->
+                <div class="widget-card composer-widget" id="composerCard">
+                    <h3>Draft Broadcast</h3>
+                    <p class="widget-desc">Select a release card to compose and publish an update on social channels.</p>
+                    
+                    <!-- Selected Info Panel -->
+                    <div class="selected-article-preview" id="selectedArticlePreview" style="display: none;">
+                        <span class="preview-badge" id="previewBadge">Agentic AI</span>
+                        <h4 id="previewTitle">SAP Unveils Joule Studio 2.0</h4>
+                        <p class="preview-meta" id="previewMeta">Published: June 15, 2026</p>
+                    </div>
+
+                    <!-- Custom Tweet Input -->
+                    <div class="tweet-form-group" id="tweetFormGroup" style="display: none;">
+                        <label for="tweetText">Tweet Draft</label>
+                        <div class="textarea-wrapper">
+                            <textarea id="tweetText" maxlength="280" placeholder="Type your custom tweet..."></textarea>
+                        </div>
+                        <div class="tweet-stats">
+                            <span class="char-count" id="charCount">280 characters remaining</span>
+                            <div class="char-progress-bar">
+                                <div class="char-progress" id="charProgress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="composer-actions" id="composerActions" style="display: none;">
+                        <a class="btn btn-primary btn-full" id="tweetBtn" target="_blank" rel="noopener noreferrer" href="#">
+                            <svg viewBox="0 0 24 24" fill="currentColor" class="icon-twitter">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            Post to X
+                        </a>
+                        <button class="btn btn-text btn-full" id="clearSelectionBtn">Clear Selection</button>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="composer-empty-state" id="composerEmptyState">
+                        <div class="empty-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M11.5 21H3.6C3.15817 21 2.8 20.6418 2.8 20.2V3.8C2.8 3.35817 3.15817 3 3.6 3H20.4C20.8418 3 21.2 3.35817 21.2 3.8V11.5" stroke-linecap="round"/>
+                                <path d="M2.8 8H21.2" stroke-linecap="round"/>
+                                <path d="M7.5 13H13.5" stroke-linecap="round"/>
+                                <path d="M7.5 17H11.5" stroke-linecap="round"/>
+                                <circle cx="17.5" cy="17.5" r="3.5" stroke-linecap="round"/>
+                                <path d="M20 20L21.5 21.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <p>No card selected</p>
+                        <span>Select an update from the news feed to compose and verify a tweet draft.</span>
+                    </div>
+                </div>
+
+                <!-- Stats Widget -->
+                <div class="widget-card stats-widget">
+                    <h3>Platform Summary</h3>
+                    
+                    <div class="stats-list">
+                        <div class="stats-row">
+                            <span class="stat-label">Total Articles</span>
+                            <span class="stat-value font-mono" id="countTotal">-</span>
+                        </div>
+                        <div class="stats-row">
+                            <span class="stat-label">Agentic AI Focus</span>
+                            <span class="stat-value font-mono" id="countAgentic">-</span>
+                        </div>
+                        <div class="stats-row">
+                            <span class="stat-label">Curated Insights</span>
+                            <span class="stat-value font-mono" id="countCurated">-</span>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+
+        </main>
+    </div>
+
+    <!-- JS Files -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
