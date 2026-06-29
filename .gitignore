@@ -11,5 +11,13 @@ env/
 .vscode/
 news.txt
 summary.txt
-
 .vercel
+
+# Exclude scratch, test projects, and other non-SAP-AI-News files from Git
+weather-assistant/
+git_test/
+product.json
+product_model.py
+upload_drive.py
+bad_schema.sql
+scratch/
